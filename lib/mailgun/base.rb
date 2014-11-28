@@ -65,7 +65,7 @@ module Mailgun
     def list_members(address)
       Mailgun::MailingList::Member.new(self, address)
     end
-    
+
     def secure
       Mailgun::Secure.new(self)
     end
@@ -75,8 +75,8 @@ module Mailgun
   # Submits the API call to the Mailgun server
   def self.submit(method, url, parameters={})
     begin
-      parameters = {:params => parameters} if method == :get
-      return JSON(RestClient::Request.execute(url: url, ssl_version: 'TLS', method: method, payload: parameters))
+      # parameters = {:params => parameters} if method == :get
+      return JSON(RestClient::Request.execute(url: url, ssl_version: 'TLSv1_2', method: method, payload: parameters))
       # return JSON(RestClient.send(method, url, parameters))
     rescue => e
       error_message = nil
