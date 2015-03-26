@@ -51,16 +51,16 @@ end
 @mailgun = Mailgun()
 
 # or alternatively:
-@mailgun = Mailgun(:api_key => 'your-api-key')
+@mailgun = Mailgun(api_key: 'your-api-key', domain: 'your-mailgun-domain')
 ```
 
 #### Sending Email
 ```ruby
 parameters = {
-  :to => "cooldev@your.mailgun.domain",
-  :subject => "missing tps reports",
-  :text => "yeah, we're gonna need you to come in on friday...yeah.",
-  :from => "lumberg.bill@initech.mailgun.domain"
+  to: "cooldev@your.mailgun.domain",
+  subject: "missing tps reports",
+  text: "yeah, we're gonna need you to come in on friday...yeah.",
+  from: "lumberg.bill@initech.mailgun.domain"
 }
 @mailgun.messages.send_email(parameters)
 ```
@@ -87,19 +87,19 @@ parameters = {
 #### Mailing List Members
 ```ruby
 # List all members within a mailing list
-@mailgun.list_members.list "devs@your.mailgun.domain"
+@mailgun.list_members('your@list.mail').list
 
 # Find a particular member in a list
-@mailgun.list_members.find "devs@your.mailgun.domain", "bond@mi6.co.uk"
+@mailgun.list_members('your@list.mail').find('member@mail.com')
 
 # Add a member to a list
-@mailgun.list_members.add "devs@your.mailgun.domain", "Q@mi6.co.uk"
+@mailgun.list_members('your@list.mail').add('member@mail.com', name: 'Name', vars: { gender: 'male', age: 20 }.to_json, subscribed: 'yes')
 
 # Update a member on a list
-@mailgun.list_members.update "devs@your.mailgun.domain", "Q@mi6.co.uk", "Q", {:gender => 'male'}.to_json, :subscribed => 'no')
+@mailgun.list_members('your@list.mail').update('member@mail.com', name: 'Name2')
 
 # Remove a member from a list
-@mailgun.list_members.remove "devs@your.mailgun.domain", "M@mi6.co.uk"
+@mailgun.list_members('your@list.mail').remove
 ```
 
 #### Mailboxes
@@ -112,7 +112,7 @@ parameters = {
 
 # Destroy a mailbox (queue bond-villian laughter)
 # "I'm sorry Bond, it seems your mailbox will be... destroyed!"
-@mailbox.mailboxes.destroy "bond@mi6.co.uk"
+@mailgun.mailboxes.destroy "bond@mi6.co.uk"
 ```
 
 #### Bounces
@@ -127,7 +127,7 @@ parameters = {
 @maligun.bounces.add "user@ema.il"
 
 # Clean user bounces
-@mailbox.bounces.destroy "user@ema.il"
+@mailgun.bounces.destroy "user@ema.il"
 ```
 
 #### Routes
@@ -159,7 +159,7 @@ parameters = {
      }
 
 # Destroy a route via its id
-@mailbox.routes.destroy "4e97c1b2ba8a48567f007fb6"
+@mailgun.routes.destroy "4e97c1b2ba8a48567f007fb6"
 ```
 
 Supported route filters are: `:match_header`, `:match_recipient`, and `:catch_all`
@@ -179,7 +179,7 @@ Supported route actions are: `:forward`, and `:stop`
 @mailgun.domains.find "example.com"
 
 # Remove a domain
-@mailbox.domains.delete "example.com"
+@mailgun.domains.delete "example.com"
 ```
 
 #### Campaigns
@@ -194,10 +194,10 @@ Supported route actions are: `:forward`, and `:stop`
 @mailgun.campaigns.find "Campaign ID"
 
 # Update a campaign
-@mailbox.campaigns.update "Campaign ID", {:name => "New Campaign Name", :id => "New ID"}
+@mailgun.campaigns.update "Campaign ID", {:name => "New Campaign Name", :id => "New ID"}
 
 # Remove a campaign
-@mailbox.campaigns.delete "Campaign ID"
+@mailgun.campaigns.delete "Campaign ID"
 ```
 
 ## Making Your Changes
